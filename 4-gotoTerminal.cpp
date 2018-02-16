@@ -124,45 +124,6 @@ void SendVelocity::goTo(double xf, double yf){
   if (d<1) stopTurtle();
 }
 
-
-void SendVelocity::goTo2(double xf, double yf){
-// calculo do módulo
-  float d=sqrt(pow((xf-odomX),2)+pow((yf-odomY),2));
-// vetores normalizados -> versor
-  double vx=(xf-odomX)/d;
-  double vy=(yf-odomY)/d;
-// projecções * os ganhos
-  sendVel(vx*Kl,vy*Kw);
-  ROS_INFO("d= %f", d);
-
-  if (d<1) stopTurtle();
-
-}
-
-void SendVelocity::goTo3(double xf, double yf){
-
-
-
-  tf2_ros::Buffer tfBuffer;
-  tf2_ros::TransformListener tfListener(tfBuffer);
-
-  geometry_msgs::TransformStamped transformStamped;
-  try{
-   transformStamped = tfBuffer.lookupTransform("turtle1", "world", ros::Time(0));
- }
- catch (tf2::TransformException &ex) {
-   ROS_WARN("%s",ex.what());
-   ros::Duration(1.0).sleep();
-   continue;
- }
-
-  float vx = Kl * sqrt(pow(transformStamped.transform.translation.x, 2) + pow(transformStamped.transform.translation.y, 2));
-  float vy = Kw * atan2(transformStamped.transform.translation.y, transformStamped.transform.translation.x);
-  
-  sendVel(vx,vy);
-
-}
-
 void SendVelocity::infoOdom(){
 
   ROS_INFO("OdometriaFun: X= %f, Y= %f, e Theta= %f", odomX,odomY,odomTheta);
@@ -189,6 +150,31 @@ void SendVelocity::run(double x, double y, double theta){
 }
 
 
+void SendVelocity::goTo2(double xf, double yf){
+  // calculo do módulo
+  float d=sqrt(pow((xf-odomX),2)+pow((yf-odomY),2));
+  while (d>0.3){
+    d=sqrt(pow((xf-odomX),2)+pow((yf-odomY),2));
+    // vetores normalizados -> versor
+    float dx=(xf-odomX)/d;
+    float dy=(yf-odomY)/d;
+
+    //float vx=cos(odomTheta)*dx-sin(odomTheta)*dy;
+    //float vy=cos(odomTheta)*dy+sin(odomTheta)*dx;
+    float vx=cos(odomTheta)*dx+sin(odomTheta)*dy;
+    float vy=cos(odomTheta)*dy-sin(odomTheta)*dx;
+  
+    // projecções * os ganhos
+    sendVel(vx*Kl,vy*Kw);
+    ROS_INFO("d= %f", d);
+    infoOdom();
+    ros::spinOnce();
+  }
+
+  if(d<0.3) stopTurtle();
+
+} 
+  
 
 int main(int argc, char** argv)
 {
@@ -196,15 +182,19 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "velocityturtle1_node");
   // criação do objecto da classe
   SendVelocity turtle1;
+  float x,y;
 
 
   ros::Rate rate(10.0);
   while(ros::ok()){
-   
 
-   turtle1.infoOdom();
-   //turtle1.goTo2(8.0,9.0);
-   turtle1.goTo3(8.0,9.0);
+   ROS_INFO("Introduza o proxima coordenada x:");
+   std::cin >> x;
+   ROS_INFO("Introduza o proxima coordenada y:");
+   std::cin >> y;
+
+   turtle1.goTo2(x,y);
+
 
    ros::spinOnce();
    rate.sleep();
