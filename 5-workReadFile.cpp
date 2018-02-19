@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <string>
 #include <cmath>
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,9 +34,7 @@ public:
   void stopTurtle();
   void odomCallback(const turtlesim::PoseConstPtr&);
   void infoOdom();
-  void goTo(int,int);
-  void run(double,double,double);
-  void readFile(string);
+  void goTo(float,float,float);
 
 private:
 
@@ -78,10 +75,11 @@ void SendVelocity::sendVel(double line_x, double ang_z){
   vel.angular.z = ang_z;
   vel_pub.publish(vel);
 
-  ROS_INFO("Velocity Comands: linear= %f e angular= %f", vel.linear.x, vel.angular.z);
+  //ROS_INFO("Velocity Comands: linear= %f e angular= %f", vel.linear.x, vel.angular.z);
 
   return;
 }
+
 
 void SendVelocity::stopTurtle(){
 
@@ -104,60 +102,49 @@ void SendVelocity::odomCallback(const turtlesim::PoseConstPtr& msg1){
 
 void SendVelocity::infoOdom(){
 
-  ROS_INFO("OdometriaFun: X= %f, Y= %f, e Theta= %f", odomX,odomY,odomTheta);
-}
-
-void SendVelocity::run(double x, double y, double theta){
-  if(odomX > x+1 || odomX < x-1){
-    ROS_DEBUG("Se %f for dif de %f.", x,odomX);
-    sendVel(0.2,0.0);
-  }
-    
-  else if(odomTheta > theta+0.5 || odomTheta < theta-0.5){
-    ROS_DEBUG("Se %f for dif de %f.", theta,odomTheta);
-    sendVel(0.0,0.2);
-  }
-    
-  else stopTurtle();
-  //{
-  //  std_msgs::Bool stop;
-  //  stop.data = true;
-  //  vazio_pub.publish(stop);
-  //}
-
+  ROS_DEBUG("OdometriaFun: X= %f, Y= %f, e Theta= %f", odomX,odomY,odomTheta);
 }
 
 
-void SendVelocity::goTo(int xf, int yf){
+void SendVelocity::goTo(float xf, float yf,float limiar){
   // calculo do módulo
   float d=sqrt(pow((xf-odomX),2)+pow((yf-odomY),2));
-  while (d>0.3){
+  float c=pow((xf-odomX),2)+pow((yf-odomY),2);
+  while (c>pow(limiar,2)){
+    c=pow((xf-odomX),2)+pow((yf-odomY),2);
     d=sqrt(pow((xf-odomX),2)+pow((yf-odomY),2));
     // vetores normalizados -> versor
     float dx=(xf-odomX)/d;
     float dy=(yf-odomY)/d;
-
-    //float vx=cos(odomTheta)*dx-sin(odomTheta)*dy;
-    //float vy=cos(odomTheta)*dy+sin(odomTheta)*dx;
+    // calculo velocidades a enviar
     float vx=cos(odomTheta)*dx+sin(odomTheta)*dy;
     float vy=cos(odomTheta)*dy-sin(odomTheta)*dx;
-  
     // projecções * os ganhos
     sendVel(vx*Kl,vy*Kw);
-    ROS_INFO("d= %f", d);
-    infoOdom();
+    ROS_INFO("vx= %f vw= %f", vx*Kl, vy*Kw);
+    ROS_DEBUG("vx= %f vy= %f d= %f xf= %f yf= %f",vx,vy, d, xf, yf);
     ros::spinOnce();
   }
 
-  if(d<0.3) stopTurtle();
+  if(c<pow(limiar,2)){
+    ROS_INFO("chegou ao ponto x= %f e y= %f",xf, yf);
+    infoOdom();
+  } 
 
-}
+} 
+  
 
-void SendVelocity::readFile(string nome){
- ifstream myReadFile;
- myReadFile.open("/home/rmp/catkin_ws/src/testeturtle/src/pontos.txt");
- int xf[100];
- int yf[100];
+int main(int argc, char** argv)
+{
+  // nome igual ao do ficheiro
+  ros::init(argc, argv, "velocityturtle1_node");
+  // criação do objecto da classe
+  SendVelocity turtle1;
+
+  ifstream myReadFile;
+  myReadFile.open("/home/rmp/catkin_ws/src/testeturtle/src/pontos.txt");
+ float xf[100];
+ float yf[100];
  int i=0;
  int j=0;
  if (myReadFile.is_open()) {
@@ -170,22 +157,12 @@ void SendVelocity::readFile(string nome){
 myReadFile.close();
 
 
-} 
-  
-
-int main(int argc, char** argv)
-{
-  // nome igual ao do ficheiro
-  ros::init(argc, argv, "velocityturtle1_node");
-  // criação do objecto da classe
-  SendVelocity turtle1;
-
 
   ros::Rate rate(10.0);
   while(ros::ok()){
   
   if(j<i-2){
-  turtle1.goTo(xf[j],yf[j]);
+  turtle1.goTo(xf[j],yf[j],0.3);
   j++;
   }
   else turtle1.stopTurtle();
