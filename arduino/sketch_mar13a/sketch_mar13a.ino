@@ -66,8 +66,8 @@ void loop() {
   }
   //if((dSonar[0] > dangerDistL || dSonar[0] == 0) && (dSonar[1] > dangerDistF || dSonar[1] == 0 ) && (dSonar[2] > dangerDistR || dSonar[2] == 0)) danger.data=false;
 
-  //if(dSonar[0] > dangerDistL || dSonar[0] == 0) aux[0]=true;
-  //if(dSonar[1] > dangerDistF || dSonar[1] > dangerDistF == 0 ) aux[1]=true;
+  if(dSonar[0] > dangerDistL || dSonar[0] == 0) aux[0]=false;
+  if(dSonar[1] > dangerDistF || dSonar[1] > dangerDistF == 0 ) aux[2]=true;
   
   
   sonarFlag.publish( &danger );

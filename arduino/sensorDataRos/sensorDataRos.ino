@@ -10,9 +10,9 @@
 
 #define SONAR_NUM 3      // Number of sensors.
 #define MAX_DISTANCE 200 // Maximum distance (in cm) to ping.
-#define dangerDistL 10
-#define dangerDistF 20
-#define dangerDistR 10
+#define dangerDistL 25
+#define dangerDistF 30
+#define dangerDistR 25
 
 ros::NodeHandle  nh;
 std_msgs::Bool danger;
