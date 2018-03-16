@@ -10,9 +10,9 @@
 
 // Each sensor's trigger pin, echo pin, and max distance to ping.
 NewPing sonar[SONAR_NUM] = {
-  NewPing(4, 5, MAX_DISTANCE), //Left  
-  NewPing(6, 7, MAX_DISTANCE), //Center
-  NewPing(8, 9, MAX_DISTANCE)  //Right
+  NewPing(2, 3, MAX_DISTANCE), //Left  
+  NewPing(4, 5, MAX_DISTANCE), //Center
+  NewPing(10, 11, MAX_DISTANCE)  //Right
 };
 int dSonar[SONAR_NUM];
 
