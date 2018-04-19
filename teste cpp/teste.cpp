@@ -1,44 +1,49 @@
 #include <iostream>
 #include <stdio.h>
 #include <cstdlib>
-#include <chrono>
 #include <ctime>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
 
 using namespace std;
+
+std::vector<float> readFile(string path){
+  float value;
+  string discard;
+  std::vector<float> aux;
+
+  ifstream myReadFile;
+  myReadFile.open(path.c_str());
+  if (myReadFile.is_open()) {
+    while (myReadFile >> discard >> value) {
+      
+      //fscanf(myReadFile,"%s %f",discard, value)
+      aux.push_back(value);
+          
+    }
+  }
+  myReadFile.close();
+
+for (std::vector<float>::const_iterator i = aux.begin(); i != aux.end(); ++i)
+    std::cout << *i << ' ';
+  cout << endl;
+
+
+return aux;
+
+}
+
 
 
 int main(int argc, char const *argv[])
 {
-	time_t lastTime = -3;
-	time_t now;
-	double teste;
 
-	for(;;){
-
-		float start = std::chrono::system_clock::now();
-		std::cout << "f(42) = " << fibonacci(42) << '\n';
-		float end = std::chrono::system_clock::now();
-		
-		std::chrono::duration<double> elapsed_seconds = end-start;
-		std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-		
-		std::cout << "finished computation at " << std::ctime(&end_time)
-		          << "elapsed time: " << elapsed_seconds.count() << "s\n";
-/*
-		printf(" inicializa: %.f\n",lastTime );
-		teste=time(NULL);
-		printf("now: %.f\n",teste );
+	 std::vector<float> setValues;
+	 setValues = readFile("markersSettings.txt");
+	 cout << setValues.at(1) << endl;
 
 
-		if(time(NULL) > lastTime+3){
-		  printf("ENTROU CHAAMDA SERVICO!!\n");
-
-		  time(&lastTime);
-		  printf("lastTime %.f \n", lastTime);
-
-		}*/
-
-
-	}
 	return 0;
 }
