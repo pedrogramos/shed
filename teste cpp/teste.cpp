@@ -7,43 +7,54 @@
 #include <vector>
 #include <string>
 
+
 using namespace std;
 
-std::vector<float> readFile(string path){
-  float value;
-  string discard;
-  std::vector<float> aux;
-
-  ifstream myReadFile;
-  myReadFile.open(path.c_str());
-  if (myReadFile.is_open()) {
-    while (myReadFile >> discard >> value) {
-      
-      //fscanf(myReadFile,"%s %f",discard, value)
-      aux.push_back(value);
-          
-    }
-  }
-  myReadFile.close();
-
-for (std::vector<float>::const_iterator i = aux.begin(); i != aux.end(); ++i)
-    std::cout << *i << ' ';
-  cout << endl;
+// exemplo de como escrever para um ficheiro .txt que é criado pelo prog
+//
 
 
-return aux;
+void getTime(){
+  //string file =filename.c_str();
+  time_t rawtime;
+  struct tm * timeinfo;
 
+  time ( &rawtime );
+  timeinfo = localtime ( &rawtime );
+  //string a =fprintf( "The current date/time is: %s", asctime (timeinfo) );
+  outfile << asctime (timeinfo);
 }
-
 
 
 int main(int argc, char const *argv[])
 {
+  std::ofstream outfile ("test.txt");
+  unsigned int i=0;
 
-	 std::vector<float> setValues;
-	 setValues = readFile("markersSettings.txt");
-	 cout << setValues.at(1) << endl;
+  /*
 
+while(i<3){
+
+  if (i==2){
+    //outfile.open ("test.txt");
+    outfile << "dif de 000"<< std::endl; //escreve numa linha
+    //outfile.close();
+  }
+
+  if (i==1){
+    //outfile.open ("test.txt");
+    outfile << "i=1"<< std::endl; //escreve na linha seguinte
+    //outfile.close();
+  }
+
+
+ i++;
+
+}*/
+
+
+getTime();
+  
 
 	return 0;
 }
