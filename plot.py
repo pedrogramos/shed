@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding=utf-8
+# -*- coding: utf-8 -*-
 
 import math
 import matplotlib.pyplot as plt
@@ -33,14 +33,15 @@ def vel_graph( path):
 		aux=time[elem]- base
 		new_time.append(aux/60)
 
-
+	plt.figure(1)
 	plt.plot(new_time,linear, label='Velocidade linear')
 	plt.plot(new_time,angular, label='Velocidade angular')
 	plt.xlabel('Tempo em minutos')
 	plt.ylabel('Velocidades')
 	plt.title('Good Run \n Velocidades')
 	plt.legend()
-	plt.show()
+	#plt.show()
+	#plt.hold(True)
 
 
 def myodom_graph(path):
@@ -67,15 +68,15 @@ def myodom_graph(path):
 		aux=time[elem]- base
 		new_time.append(aux/60)
 
-
-	plt.plot(new_time,x, label='Posição em x')
-	plt.plot(new_time,y, label='Posição em y')
-	plt.plot(new_time,theta, label='Posição angular/Orientação')
+	plt.figure(2)
+	plt.plot(new_time,x, label='x')
+	plt.plot(new_time,y, label='y')
+	plt.plot(new_time,theta, label='theta')
 	plt.xlabel('Tempo (min)')
-	plt.ylabel('Posição')
+	plt.ylabel('Posicao')
 	plt.title('\n Odometria')
-	plt.legend()
-	plt.show()
+	#plt.legend()
+	#plt.show()
 
 	
 
@@ -86,7 +87,9 @@ if __name__ == "__main__":
 	plt.ylabel('some numbers')
 	plt.show()
 	'''
-	#vel_graph(path1_1)
+
+	vel_graph(path1_1)
 	myodom_graph(paht1_3)
+	plt.show()
 
 	
