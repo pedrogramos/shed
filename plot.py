@@ -8,7 +8,7 @@ import csv
 global path1_1, paht1_2, paht1_3
 path1_1 = "/home/rmp/bagfiles/3_good_run/vel.txt"
 paht1_2 = "/home/rmp/bagfiles/3_good_run/segodom.txt"
-paht1_3 = "/home/rmp/bagfiles/3_good_run/myodom.txt"
+paht1_3 = "/home/rmp/bagfiles/with vector/1-turn back/new_odom.txt"
 
 
 def vel_graph( path):
@@ -44,7 +44,7 @@ def vel_graph( path):
 	#plt.hold(True)
 
 
-def myodom_graph(path):
+def myodom_graph(path,number):
 	#time,field.x,field.y,field.theta
 	time = []
 	x = []
@@ -68,10 +68,10 @@ def myodom_graph(path):
 		aux=time[elem]- base
 		new_time.append(aux/60)
 
-	plt.figure(2)
-	plt.plot(new_time,x, label='x')
-	plt.plot(new_time,y, label='y')
-	plt.plot(new_time,theta, label='theta')
+	plt.figure(number)
+	plt.plot(new_time,x, label="posicao em x")
+	plt.plot(new_time,y, label="posicao em y")
+	plt.plot(new_time,theta, label="valor de theta")
 	plt.xlabel('Tempo (min)')
 	plt.ylabel('Posicao')
 	plt.title('\n Odometria')
@@ -88,8 +88,9 @@ if __name__ == "__main__":
 	plt.show()
 	'''
 
-	vel_graph(path1_1)
-	myodom_graph(paht1_3)
+	#vel_graph(path1_1)
+	myodom_graph("/home/rmp/bagfiles/with vector/1-turn back/new_odom.txt",2)
+	myodom_graph("/home/rmp/bagfiles/with vector/1-turn back/odom.txt",3)
 	plt.show()
 
 	
