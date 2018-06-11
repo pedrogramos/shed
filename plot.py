@@ -89,8 +89,8 @@ if __name__ == "__main__":
 	'''
 
 	#vel_graph(path1_1)
-	myodom_graph("/home/rmp/bagfiles/with vector/1-turn back/new_odom.txt",2)
-	myodom_graph("/home/rmp/bagfiles/with vector/1-turn back/odom.txt",3)
+	myodom_graph("/home/rmp/bagfiles/with vector/6- fail odom/new_odom.txt",2)
+	myodom_graph("/home/rmp/bagfiles/with vector/6- fail odom/odomupdater.txt",3)
 	plt.show()
 
 	
