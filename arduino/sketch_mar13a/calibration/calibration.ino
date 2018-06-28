@@ -7,8 +7,8 @@ Acumula 10 valores faz a média e devolve or resultado.
 Para inciciar o processo enviar o char s através do serial.
  */
 
-#define s1 A5
-#define s2 A1
+#define s1 A2
+#define s2 A3
 bool once = true;
 char receivedChar;
 int d = 0;
@@ -18,15 +18,16 @@ float meanV = 0, meanD = 0;
 
 
 SharpIR sensor( SharpIR::GP2Y0A02YK0F, s1 );
-//SharpIR sensor2( SharpIR::GP2Y0A02YK0F, A1 );
+SharpIR sensor2( SharpIR::GP2Y0A02YK0F, s2 );
 
 
-
+/*
 int getDistanceCm(int _sensorPin) {
   float sensorValue = analogRead(_sensorPin);
     float cm = 10650.08 * pow(sensorValue,-0.935) - 10;
     return roundf(cm);
 }
+*/
 
 float getMyDistance(int _sensorPin) {
   float v1 = analogRead(_sensorPin)* (5.0 / 1023.0);
@@ -111,9 +112,12 @@ void loop()
 
   if (receivedChar == 'm'){
     float d12 = getMyDistance(s1);
-    delay(100);
+    float d22 = getMyDistance(s2);
+    delay(50);
     Serial.print("\nMeasure: ");
     Serial.print(d12);
+    Serial.print("\nMeasure2: ");
+    Serial.print(d22);
     receivedChar = 'n';   
     
   }

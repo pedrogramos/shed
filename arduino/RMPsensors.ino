@@ -5,11 +5,11 @@ codigo exemplo para a aquisição e tratamento dos valores dos sensores do RMP 2
 Publica os resultados numa ROS node
 
 --> disposição dos sensores:
-		s5		
-   IR4 		IR3 
+		 s5		
+   IR4 	      IR3 
 
-IR1 		    IR2
-s1			    s2
+IR1 		     IR2
+s1			     s2
 
 */
 
@@ -43,8 +43,8 @@ float getIRDistance(int _sensorPin) {
 //array para os sonares
 NewPing sonar[SONAR_NUM] = {
   NewPing(4, 5, MAX_DISTANCE), //Left  
-  NewPing(6, 7, MAX_DISTANCE), //Center
-  NewPing(8, 9, MAX_DISTANCE)  //Right
+  NewPing(6, 7, MAX_DISTANCE), //Right
+  NewPing(8, 9, MAX_DISTANCE)  //Center
 };
 
 

@@ -1,4 +1,10 @@
 
+void SendVelocity::vecCallback(const geometry_msgs::Point::ConstPtr& data){
+
+  repulsive.x = data->x;
+  repulsive.y = data->y;
+
+}
 
 void SendVelocity::goTo(float xf, float yf,float limiar){
 
