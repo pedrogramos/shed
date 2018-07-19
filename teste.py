@@ -59,64 +59,67 @@ panel.pack(side = "bottom", fill = "both", expand = "yes")
 window.mainloop()
 '''
 
+import Tkinter
 
+window = Tkinter.Tk()
+window.title("Manager")
+#window.geometry('350x400')
+window.configure(background = "white")
+
+places = {}
+
+places ["Main Hall"] = [20,10]
+places ["Mobile Robotics Lab"] = [40,20]
+places ["Accounting"] = [30,50]
+
+
+def show_all():
+	lb_places.delete(0,"end") # to clear the window when you press the button
+	for destiny in places:
+		lb_places.insert("end", destiny)
+
+def calculateCourse():
+	#lbl_output.delete(0,"end")
+	selected = lb_places.get("active") #the active item is the one which is corrently sellected
+	result = places[selected]
+	#msg = "%f : %f" % selected, result[1]
+	msg = result[1]
+	lbl_output["text"] = msg
+
+def resume():
+	pass
+
+def stopSegway():
+	pass
+
+
+#label
+lbl_output = Tkinter.Label(window,text = "Hello! Where do you want to go?")
+lbl_output.pack()
+#input box
+txt_input = Tkinter.Entry(window)
+txt_input.pack()
+#listbox
+lb_places = Tkinter.Listbox(window)
+lb_places.pack()
+
+#button
 '''
-from tkinter import *
-
-root = Tk()
-
-def task():
-    print("hello")
-    root.after(2000, task)  # reschedule event in 2 seconds
-
-root.after(2000, task)
-root.mainloop()
+btn_show_all = Tkinter.Button(window, text ="Show all", command = show_all)
+btn_show_all.pack()
 '''
+btn_lets_go = Tkinter.Button(window, text ="Let's go!", command = calculateCourse)
+btn_lets_go.pack()
+
+btn_stop = Tkinter.Button(window, text ="Stop Segway", command = stopSegway)
+btn_stop.pack()
+
+btn_resume = Tkinter.Button(window, text ="Resume destination", command = resume)
+btn_resume.pack()
 
 
-import serial
-import copy
-import rospy
-from RMPISR.msg import sensors
 
-
-values = []
-array = sensors()
-
-pub = rospy.Publisher('sensorArray', sensors, queue_size=10)
-
-ser = serial.Serial('/dev/ttyACM1', 115200)
-print "Trying to connect to arduino..."
-
-if (ser.is_open):
-	print "Connection established!"
-
-while ser.is_open:
-
-	s = ser.readline()
-	sf = s.decode('utf-8')
-
-	if sf == "hshake\r\n":
-		if len(values) == 7:
-			array.ir1 = values[0]
-			array.s1 = values[1]
-			array.ir2 = values[2]
-			array.s2 = values[3]
-			array.ir3 = values[4]
-			array.ir4 = values[5]
-			array.s5 = values[6]
-
-			pub.publish(array)
-
-			print values
-			print "ir2: ", array.ir2
-			print "s2: ", array.s2
-			print "ir3: ", array.ir3
-			del values[:]
-	else:
-		print "Receiving values."
-		values.append(copy.deepcopy(sf.strip("/r/n")))
-
-
+show_all()
+window.mainloop()
 
 
